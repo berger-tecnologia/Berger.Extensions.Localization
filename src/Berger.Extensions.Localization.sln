@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Berger.Extensions.Localization", "Berger.Extensions.Localization\Berger.Extensions.Localization.csproj", "{780F2972-0461-419B-B148-CE1787409F6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Berger.Extensions.Localization", "Berger.Extensions.Localization\Berger.Extensions.Localization.csproj", "{780F2972-0461-419B-B148-CE1787409F6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Berger.Extensions.Localization.Tests", "Berger.Extensions.Localization.Tests\Berger.Extensions.Localization.Tests.csproj", "{FA11A107-5315-4CD2-A075-E9A4698F3226}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{780F2972-0461-419B-B148-CE1787409F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{780F2972-0461-419B-B148-CE1787409F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{780F2972-0461-419B-B148-CE1787409F6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA11A107-5315-4CD2-A075-E9A4698F3226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA11A107-5315-4CD2-A075-E9A4698F3226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA11A107-5315-4CD2-A075-E9A4698F3226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA11A107-5315-4CD2-A075-E9A4698F3226}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

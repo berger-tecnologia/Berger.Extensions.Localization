@@ -36,13 +36,13 @@ namespace Berger.Extensions.Localization
             return FallbackLanguageCode;
         }
 
-        public static IEnumerable<T> Localize<T>(in IEnumerable<T> items, string languageCode, LocalizationDepth depth = LocalizationDepth.Shallow)
+        public static IEnumerable<T> Localize<T>(this IEnumerable<T> items, string languageCode, LocalizationDepth depth = LocalizationDepth.Shallow)
             where T : class, ILocalizable, new()
         {
             return items.Select(item => Localize(item, languageCode, depth));
         }
 
-        public static IEnumerable<T> Localize<T>(in IEnumerable<T> items, LocalizationDepth depth = LocalizationDepth.Shallow)
+        public static IEnumerable<T> Localize<T>(this IEnumerable<T> items, LocalizationDepth depth = LocalizationDepth.Shallow)
             where T : class, ILocalizable, new()
         {
             var languageCode = GetLanguageCode();
@@ -50,19 +50,32 @@ namespace Berger.Extensions.Localization
             return items.Select(item => Localize(item, languageCode, depth));
         }
 
-        public static T Localize<T>(in T item, in string languageCode, in LocalizationDepth depth = LocalizationDepth.Shallow)
+        public static T Localize<T>(this T item, in string languageCode, in LocalizationDepth depth = LocalizationDepth.Shallow)
             where T : class, ILocalizable
         {
             if (item is null)
                 return null;
 
-            var itemCopy = item.CloneObject();
-
             var depthChain = new List<object>(32);
 
-            LocalizeItem(itemCopy, SupportedLanguages.Contains(languageCode) ? languageCode : SupportedLanguages.First(), depthChain, depth);
+            LocalizeItem(item, SupportedLanguages.Contains(languageCode) ? languageCode : SupportedLanguages.First(), depthChain, depth);
 
-            return itemCopy;
+            return item;
+        }
+
+        public static T Localize<T>(this T item, in LocalizationDepth depth = LocalizationDepth.Shallow)
+            where T : class, ILocalizable
+        {
+            if (item is null)
+                return null;
+
+            var languageCode = GetLanguageCode();
+            
+            var depthChain = new List<object>(32);
+
+            LocalizeItem(item, SupportedLanguages.Contains(languageCode) ? languageCode : SupportedLanguages.First(), depthChain, depth);
+
+            return item;
         }
 
         private static void LocalizeItem(in object item, in string languageCode, in List<object> depthChain, in LocalizationDepth depth = LocalizationDepth.Shallow)
@@ -138,6 +151,28 @@ namespace Berger.Extensions.Localization
                 {
                     TryLocalizeProperty(item, member, languageCode, depthChain, depth);
                 }
+            }
+        }
+
+        public static string Serialize(in IDictionary<string, string> content)
+        {
+            using (var sw = new StringWriter())
+            using (var jw = new JsonTextWriter(sw))
+            {
+                jw.WriteStartObject();
+
+                foreach (var languageCode in SupportedLanguages)
+                {
+                    if (content.TryGetValue(languageCode, out var value))
+                    {
+                        jw.WritePropertyName(languageCode);
+                        jw.WriteValue(value);
+                    }
+                }
+
+                jw.WriteEndObject();
+
+                return sw.ToString();
             }
         }
 
