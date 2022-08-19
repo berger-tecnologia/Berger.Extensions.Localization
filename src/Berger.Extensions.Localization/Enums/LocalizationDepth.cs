@@ -1,4 +1,4 @@
-﻿namespace Berger.Extensions.Localization.Enums
+﻿namespace Berger.Extensions.Localization
 {
     public enum LocalizationDepth
     {

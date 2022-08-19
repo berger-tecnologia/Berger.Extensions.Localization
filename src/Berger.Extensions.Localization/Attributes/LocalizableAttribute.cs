@@ -1,11 +1,10 @@
-﻿namespace Berger.Extensions.Localization.Attributes
+﻿namespace Berger.Extensions.Localization
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class LocalizedAttribute : Attribute
     {
         public LocalizedAttribute() : base()
         {
-            var a = 1;
         }
     }
 }

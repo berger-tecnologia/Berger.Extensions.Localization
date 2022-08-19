@@ -1,4 +1,4 @@
-﻿namespace Berger.Extensions.Localization.Interfaces
+﻿namespace Berger.Extensions.Localization
 {
     public interface ILocalizable
     {

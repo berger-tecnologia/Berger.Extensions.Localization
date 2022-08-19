@@ -1,12 +1,9 @@
-﻿using Berger.Extensions.Localization.Attributes;
-using Berger.Extensions.Localization.Interfaces;
-using Berger.Extensions.Localization.Enums;
-using System.Collections.Concurrent;
-using System.Globalization;
+﻿using Newtonsoft.Json;
 using System.Reflection;
-using Newtonsoft.Json;
+using System.Globalization;
+using System.Collections.Concurrent;
 
-namespace Berger.Extensions.Localization.Services
+namespace Berger.Extensions.Localization
 {
     public static class ObjectLocalizer
     {
@@ -57,9 +54,7 @@ namespace Berger.Extensions.Localization.Services
             where T : class, ILocalizable
         {
             if (item is null)
-            {
                 return null;
-            }
 
             var itemCopy = item.CloneObject();
 
@@ -75,13 +70,9 @@ namespace Berger.Extensions.Localization.Services
             foreach (var property in _propertyCache.GetOrAdd(item.GetType(), t => t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)))
             {
                 if (property.IsDefined(typeof(LocalizedAttribute), true))
-                {
                     TryLocalizeProperty(item, property, languageCode);
-                }
                 else if (depth != LocalizationDepth.Shallow)
-                {
                     TryLocalizeChildren(item, property, languageCode, depthChain, depth);
-                }
             }
         }
         private static void TryLocalizeProperty(in object item, in PropertyInfo propertyInfo, in string languageCode)
@@ -89,14 +80,10 @@ namespace Berger.Extensions.Localization.Services
             var propertyValue = propertyInfo.GetValue(item)?.ToString();
 
             if (string.IsNullOrWhiteSpace(propertyValue))
-            {
                 return;
-            }
 
             if (!TryDeserialize(propertyValue, out var localizedContents))
-            {
                 return;
-            }
 
             var contentForLanguage = GetContentForLanguage(localizedContents, languageCode);
 
@@ -106,21 +93,15 @@ namespace Berger.Extensions.Localization.Services
         private static void TryLocalizeProperty(in object @base, in object member, in string languageCode, in List<object> depthChain, LocalizationDepth depth = LocalizationDepth.Shallow)
         {
             if (SkipItemLocalization(@base, member))
-            {
                 return;
-            }
 
             TryAddToDepthChain(@base, depthChain);
 
             if (!TryAddToDepthChain(member, depthChain))
-            {
                 return;
-            }
 
             if (depth == LocalizationDepth.OneLevel)
-            {
                 depth = LocalizationDepth.Shallow;
-            }
 
             LocalizeItem(member, languageCode, depthChain, depth);
         }
@@ -128,9 +109,7 @@ namespace Berger.Extensions.Localization.Services
         private static bool SkipItemLocalization(in object @base, in object member)
         {
             if (@base is null || member is null)
-            {
                 return true;
-            }
 
             return ReferenceEquals(@base, member);
         }
@@ -138,14 +117,10 @@ namespace Berger.Extensions.Localization.Services
         private static bool TryAddToDepthChain(object item, in List<object> depthChain)
         {
             if (item is null)
-            {
                 return false;
-            }
 
             if (depthChain.AsParallel().Any(x => ReferenceEquals(item, x)))
-            {
                 return false;
-            }
 
             depthChain.Add(item);
 
@@ -155,9 +130,8 @@ namespace Berger.Extensions.Localization.Services
         private static void TryLocalizeChildren(in object item, in PropertyInfo property, in string languageCode, in List<object> depthChain, in LocalizationDepth depth)
         {
             if (typeof(ILocalizable).IsAssignableFrom(property.PropertyType))
-            {
                 TryLocalizeProperty(item, property.GetValue(item, null), languageCode, depthChain, depth);
-            }
+
             else if (typeof(IEnumerable<ILocalizable>).IsAssignableFrom(property.PropertyType))
             {
                 foreach (var member in (IEnumerable<object>)property.GetValue(item, null))
