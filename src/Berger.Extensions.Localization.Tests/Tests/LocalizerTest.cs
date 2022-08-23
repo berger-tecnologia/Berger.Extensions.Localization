@@ -1,44 +1,42 @@
-using Berger.Extensions.Localization.Tests.Models;
-using NUnit.Framework;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using NUnit.Framework;
 using System.Threading;
+using System.Globalization;
+using System.Collections.Generic;
+using Berger.Extensions.Localization.Tests.Models;
 
 namespace Berger.Extensions.Localization.Tests
 {
     public class Tests
     {
         private Product Product = new();
-        private HashSet<string> ReqLanguages = new HashSet<string>(new[] { "en", "pt" });
-        private HashSet<string> OptLanguages = new HashSet<string>(new[] { "es" });
+        private HashSet<string> Optional = new HashSet<string>(new[] { "es" });
+        private HashSet<string> Required = new HashSet<string>(new[] { "en", "pt" });
 
-        private string ProductNamejson = $"{{\"en\":\"Car\",\"pt\":\"Carro\"}}";
-        private string ProductDescriptionjson = $"{{\"en\":\"This is a prodcut description!\",\"pt\":\"Isso é uma descrição de produto!\"}}";
+        private string ProductName = $"{{\"en\":\"Car\",\"pt\":\"Carro\"}}";
+        private string ProductDescription = $"{{\"en\":\"This is a product description.\",\"pt\":\"Isso é uma descrição de produto.\"}}";
 
-        private string CategoryNamejson = $"{{\"en\":\"Cars\",\"pt\":\"Carros\"}}";
-        private string CategoryDescriptionjson = $"{{\"en\":\"This is a category description!\",\"pt\":\"Isso é uma descrição de categoria!\"}}";
+        private string CategoryName = $"{{\"en\":\"Cars\",\"pt\":\"Carros\"}}";
+        private string CategoryDescription = $"{{\"en\":\"This is a category description.\",\"pt\":\"Isso é uma descrição de categoria.\"}}";
 
         [SetUp]
         public void Setup()
         {
-            ObjectLocalizer.Configure(ReqLanguages, OptLanguages);
+            Localizer.Configure(Required, Optional);
 
-            // Setting the Thread culture to en
             var culture = CultureInfo.GetCultureInfo("en");
 
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            // Creating the product
             Product = new Product()
             {
-                Name = ProductNamejson,
-                Description = ProductDescriptionjson,
+                Name = ProductName,
+                Description = ProductDescription,
                 Category = new Category()
                 {
-                    Name = CategoryNamejson,
-                    Description = CategoryDescriptionjson
+                    Name = CategoryName,
+                    Description = CategoryDescription
                 }
             };
         }
@@ -47,41 +45,37 @@ namespace Berger.Extensions.Localization.Tests
         [Order(0)]
         public void ShouldBeConfigured()
         {
-            Assert.IsTrue(ObjectLocalizer.IsConfigured);
+            Assert.IsTrue(Localizer.IsConfigured);
         }
 
         [Test]
         [Order(1)]
         public void ShouldGetRequiredLanguages()
         {
-            var expected = ReqLanguages;
-
-            Assert.IsTrue(!ObjectLocalizer.RequiredLanguages.Except(expected).Any());
+            Assert.IsTrue(!Localizer.Required.Except(Required).Any());
         }
 
         [Test]
         [Order(2)]
         public void ShouldGetOptionalLanguages()
         {
-            var expected = OptLanguages;
-
-            Assert.IsTrue(!ObjectLocalizer.OptionalLanguages.Except(expected).Any());
+            Assert.IsTrue(!Localizer.Optional.Except(Optional).Any());
         }
 
         [Test]
         [Order(3)]
         public void ShouldGetAllLanguages()
         {
-            var expected = ReqLanguages.Union(OptLanguages);
+            var expected = Required.Union(Optional);
 
-            Assert.IsTrue(!ObjectLocalizer.SupportedLanguages.Except(expected).Any());
+            Assert.IsTrue(!Localizer.Supported.Except(expected).Any());
         }
 
         [Test]
         [Order(4)]
         public void ShouldTranslateProductInEnglish()
         {
-            Product.Localize(LocalizationDepth.Deep);
+            Product.Localize(Depth.Deep);
 
             Assert.IsTrue(Product.Name == "Car");
         }
@@ -90,7 +84,7 @@ namespace Berger.Extensions.Localization.Tests
         [Order(5)]
         public void ShouldTranslateProductInPortuguese()
         {
-            Product.Localize("pt", LocalizationDepth.Deep);
+            Product.Localize("pt", Depth.Deep);
 
             Assert.IsTrue(Product.Name == "Carro");
         }
@@ -99,14 +93,14 @@ namespace Berger.Extensions.Localization.Tests
         [Order(6)]
         public void ShouldNotTranslateProductInPortuguese()
         {
-            Product.Localize(LocalizationDepth.Deep);
+            Product.Localize(Depth.Deep);
 
             Assert.IsFalse(Product.Name == "Carro");
         }
 
         [Test]
         [Order(7)]
-        public void ShouldSerealize()
+        public void ShouldSerialize()
         {
             var expected = $"{{\"en\":\"Car\",\"pt\":\"Carro\",\"es\":\"Coche\"}}";
 
@@ -117,14 +111,14 @@ namespace Berger.Extensions.Localization.Tests
                 { "es", "Coche" },
             };
 
-            var result = ObjectLocalizer.Serialize(dictionary);
+            var result = Localizer.Serialize(dictionary);
 
             Assert.IsTrue(result == expected);
         }
 
         [Test]
         [Order(8)]
-        public void ShouldDeserealize()
+        public void ShouldDeserialize()
         {
             var json = $"{{\"en\":\"Car\",\"pt\":\"Carro\",\"es\":\"Coche\"}}";
 
@@ -135,7 +129,7 @@ namespace Berger.Extensions.Localization.Tests
                 { "es", "Coche" },
             };
 
-            var result = ObjectLocalizer.Deserialize(json);
+            var result = Localizer.Deserialize(json);
 
             Assert.IsTrue(expected.Count == result.Count && !expected.Except(result).Any());
         }

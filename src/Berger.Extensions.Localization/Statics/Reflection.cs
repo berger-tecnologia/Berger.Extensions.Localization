@@ -6,7 +6,6 @@ namespace Berger.Extensions.Localization
     {
         public static T CloneObject<T>(this T objSource) where T : class
         {
-            //Get the type of source object and create a new instance of that type
             var typeSource = objSource.GetType();
 
             T target = Activator.CreateInstance(typeSource) as T;
