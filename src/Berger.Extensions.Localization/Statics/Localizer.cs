@@ -25,7 +25,6 @@ namespace Berger.Extensions.Localization
 
             IsConfigured = true;
         }
-
         public static string GetLanguageCode()
         {
             var code = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
@@ -37,19 +36,16 @@ namespace Berger.Extensions.Localization
 
             return Fallback;
         }
-
         public static IEnumerable<T> Localize<T>(this IEnumerable<T> items, string language, Depth depth = Depth.Flat) where T : class, ILocalizable, new()
         {
             return items.Select(item => Localize(item, language, depth));
         }
-
         public static IEnumerable<T> Localize<T>(this IEnumerable<T> items, Depth depth = Depth.Flat) where T : class, ILocalizable, new()
         {
             var code = GetLanguageCode();
 
             return items.Select(item => Localize(item, code, depth));
         }
-
         public static T Localize<T>(this T item, in string code, in Depth depth = Depth.Flat) where T : class, ILocalizable
         {
             if (item is null)
@@ -61,7 +57,6 @@ namespace Berger.Extensions.Localization
 
             return item;
         }
-
         public static T Localize<T>(this T item, in Depth depth = Depth.Flat) where T : class, ILocalizable
         {
             if (item is null)
@@ -75,7 +70,6 @@ namespace Berger.Extensions.Localization
 
             return item;
         }
-
         private static void LocalizeItem(in object item, in string code, in List<object> depthChain, in Depth depth = Depth.Flat)
         {
             foreach (var property in _propertyCache.GetOrAdd(item.GetType(), t => t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty)))
@@ -100,7 +94,6 @@ namespace Berger.Extensions.Localization
 
             propertyInfo.SetValue(item, content, null);
         }
-
         private static void TryLocalizeProperty(in object @base, in object member, in string code, in List<object> depthChain, Depth depth = Depth.Flat)
         {
             if (SkipItemLocalization(@base, member))
@@ -116,7 +109,6 @@ namespace Berger.Extensions.Localization
 
             LocalizeItem(member, code, depthChain, depth);
         }
-
         private static bool SkipItemLocalization(in object @base, in object member)
         {
             if (@base is null || member is null)
@@ -124,7 +116,6 @@ namespace Berger.Extensions.Localization
 
             return ReferenceEquals(@base, member);
         }
-
         private static bool TryAddToDepthChain(object item, in List<object> depthChain)
         {
             if (item is null)
@@ -137,7 +128,6 @@ namespace Berger.Extensions.Localization
 
             return true;
         }
-
         private static void TryLocalizeChildren(in object item, in PropertyInfo property, in string code, in List<object> depthChain, in Depth depth)
         {
             if (typeof(ILocalizable).IsAssignableFrom(property.PropertyType))
