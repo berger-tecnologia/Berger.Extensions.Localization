@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Berger.Extensions.Localization.Tests.Models
+﻿namespace Berger.Extensions.Localization.Tests.Models
 {
     public class Category : ILocalizable
     {
