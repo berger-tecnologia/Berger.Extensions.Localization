@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include:
+    - main
+name: 1.0.0$(Rev:.r)
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/dev
+jobs:
+- job: Job_1
+  displayName: Berger.Extensions.Localization-Agent
+  pool:
+    vmImage: windows-latest
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
+  - task: UseDotNet@2
+    displayName: dotnet core sdk 7.x use
+    inputs:
+      version: 7.x
+  - task: DotNetCoreCLI@2
+    displayName: dotnet restore
+    inputs:
+      command: restore
+      projects: '**/*.csproj'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build
+    inputs:
+      projects: '**/*.csproj'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: pack
+      versioningScheme: byBuildNumber
+  - task: NuGetCommand@2
+    displayName: nuget push
+    inputs:
+      command: push
+      nuGetFeedType: external
+      publishFeedCredentials: 'berger.extensions.localization-nuget'
+...
