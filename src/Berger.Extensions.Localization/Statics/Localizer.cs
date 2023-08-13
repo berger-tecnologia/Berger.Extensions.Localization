@@ -14,7 +14,6 @@ namespace Berger.Extensions.Localization
         public static HashSet<string> Optional { get; private set; } = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
         public static HashSet<string> Supported => new HashSet<string>(Required.Union(Optional), StringComparer.InvariantCultureIgnoreCase);
         public static HashSet<string> Required { get; private set; } = new HashSet<string>(new[] { Fallback }, StringComparer.InvariantCultureIgnoreCase);
-
         #endregion
 
         #region Methods
