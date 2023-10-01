@@ -10,14 +10,14 @@ namespace Berger.Extensions.Localization.Tests
     public class Tests
     {
         private Product Product = new();
-        private HashSet<string> Optional = new HashSet<string>(new[] { "es" });
-        private HashSet<string> Required = new HashSet<string>(new[] { "en", "pt" });
+        private readonly HashSet<string> Optional = new(new[] { "es" });
+        private readonly HashSet<string> Required = new(new[] { "en", "pt" });
 
-        private string ProductName = $"{{\"en\":\"Car\",\"pt\":\"Carro\"}}";
-        private string ProductDescription = $"{{\"en\":\"This is a product description.\",\"pt\":\"Isso é uma descrição de produto.\"}}";
+        private readonly string ProductName = $"{{\"en\":\"Car\",\"pt\":\"Carro\"}}";
+        private readonly string ProductDescription = $"{{\"en\":\"This is a product description.\",\"pt\":\"Isso é uma descrição de produto.\"}}";
 
-        private string CategoryName = $"{{\"en\":\"Cars\",\"pt\":\"Carros\"}}";
-        private string CategoryDescription = $"{{\"en\":\"This is a category description.\",\"pt\":\"Isso é uma descrição de categoria.\"}}";
+        private readonly string CategoryName = $"{{\"en\":\"Cars\",\"pt\":\"Carros\"}}";
+        private readonly string CategoryDescription = $"{{\"en\":\"This is a category description.\",\"pt\":\"Isso é uma descrição de categoria.\"}}";
 
         [SetUp]
         public void Setup()

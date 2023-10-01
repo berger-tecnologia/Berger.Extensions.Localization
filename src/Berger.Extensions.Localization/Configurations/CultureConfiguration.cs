@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Berger.Extensions.Localization.Configurations
+namespace Berger.Extensions.Localization
 {
     public static class CultureConfiguration
     {
