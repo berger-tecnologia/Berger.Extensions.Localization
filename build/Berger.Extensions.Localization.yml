@@ -40,5 +40,5 @@ jobs:
     inputs:
       command: push
       nuGetFeedType: external
-      publishFeedCredentials: 'berger.extensions.localization-nuget'
+      publishFeedCredentials: 'berger.extensions.nuget'
 ...

@@ -5,7 +5,16 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Berger.Extensions.Localization", "Berger.Extensions.Localization\Berger.Extensions.Localization.csproj", "{780F2972-0461-419B-B148-CE1787409F6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Berger.Extensions.Localization.Tests", "Berger.Extensions.Localization.Tests\Berger.Extensions.Localization.Tests.csproj", "{FA11A107-5315-4CD2-A075-E9A4698F3226}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Berger.Extensions.Localization.Tests", "Berger.Extensions.Localization.Tests\Berger.Extensions.Localization.Tests.csproj", "{FA11A107-5315-4CD2-A075-E9A4698F3226}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{E5C29648-2FDB-4077-A4B8-BAF1343DCFFA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7724AE8D-552E-4768-9C0A-400EE39AB49E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{7DDCF3F3-9A45-4D5A-B099-04A873B3BF07}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\Berger.Extensions.Localization.yml = ..\build\Berger.Extensions.Localization.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +33,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{780F2972-0461-419B-B148-CE1787409F6C} = {E5C29648-2FDB-4077-A4B8-BAF1343DCFFA}
+		{FA11A107-5315-4CD2-A075-E9A4698F3226} = {7724AE8D-552E-4768-9C0A-400EE39AB49E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {002D28C2-AEEC-4247-B2E8-4B97AB468DDC}
