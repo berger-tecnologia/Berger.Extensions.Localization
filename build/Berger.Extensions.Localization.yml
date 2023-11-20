@@ -25,7 +25,7 @@ jobs:
 
   - task: UseDotNet@2
     inputs:
-      version: 7.x
+      version: 8.x
 
   - task: DotNetCoreCLI@2
     displayName: dotnet restore
